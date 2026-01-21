@@ -29,12 +29,12 @@ const config = {
 				}
 				return 'ignore';
 			},
-			handleHttpError: ({ status, path, referrer }) => {
+			handleHttpError: ({ status, path }) => {
 				// Ignore 404s for assets and root path during prerender
 				if (status === 404 && (path.startsWith('/behan.dev-svelte/_app/') || path === '/')) {
 					return;
 				}
-				throw new Error(`${status} ${path} (linked from ${referrer})`);
+				throw new Error(`${status} ${path}`);
 			}
 		}
 	}
