@@ -7,9 +7,9 @@
 			class="rounded-lg border border-gray-200 bg-gray-100 p-6 md:p-8 dark:border-gray-700 dark:bg-gray-800"
 		>
 			<p class="mb-4 text-lg text-gray-700 dark:text-gray-300">
-				Hello! I'm Marc Behan, an engineering leader with 20+ years of experience
-				designing, building, and operating large-scale, highly available, distributed systems across
-				SaaS, financial services, and global enterprise organisations.
+				Hello! I'm Marc Behan, an engineering leader with 20+ years of experience designing,
+				building, and operating large-scale, highly available, distributed systems across SaaS,
+				financial services, and global enterprise organisations.
 			</p>
 			<p class="text-gray-700 dark:text-gray-300">
 				Proven success leading managers of managers and senior engineers in geographically
