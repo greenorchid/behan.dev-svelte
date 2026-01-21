@@ -78,7 +78,7 @@
 >
 	<!-- Logo and brand on left -->
 	<div class="flex items-center gap-3">
-		<a href="/" class="flex items-center gap-3">
+		<a href="{base}/" class="flex items-center gap-3">
 			<LogoAnimated size={40} />
 			<span class="text-lg font-semibold text-gray-900 dark:text-gray-100">behan.dev</span>
 		</a>
