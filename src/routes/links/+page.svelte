@@ -69,7 +69,7 @@
 							window.open(link.url, '_blank');
 						}
 					}}
-					class="group cursor-pointer rounded-lg border border-gray-200 bg-gray-100 p-6 transition-colors duration-200 hover:border-green-500 hover:shadow-lg focus:ring-2 focus:ring-blue-500 focus:outline dark:border-gray-700 dark:bg-gray-800 dark:hover:border-green-500"
+					class="card-interactive group cursor-pointer"
 				>
 					<div class="flex items-start justify-between gap-4">
 						<div class="flex-1">
