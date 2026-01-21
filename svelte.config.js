@@ -31,7 +31,10 @@ const config = {
 			},
 			handleHttpError: ({ status, path }) => {
 				// Ignore 404s for assets and root path during prerender
-				if (status === 404 && (path.startsWith('/behan.dev-svelte/_app/') || path === '/')) {
+				if (
+					status === 404 &&
+					(path.startsWith('/_app/') || path.startsWith('behan.dev-svelte/_app/') || path === '/')
+				) {
 					return;
 				}
 				throw new Error(`${status} ${path}`);
