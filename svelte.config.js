@@ -15,10 +15,12 @@ const config = {
 			precompress: false,
 			strict: true
 		}),
+		paths: {
+			base: '/behan.dev-svelte'
+		},
 		prerender: {
 			entries: ['*'],
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars
-			handleUnseenRoutes: (route, _seen) => {
+			handleUnseenRoutes: (route) => {
 				if (
 					typeof route === 'string' &&
 					(route.startsWith('/blog/') || route.startsWith('/recipes/'))
@@ -26,6 +28,13 @@ const config = {
 					return 'prerender';
 				}
 				return 'ignore';
+			},
+			handleHttpError: ({ status, path, referrer }) => {
+				// Ignore 404s for assets and root path during prerender
+				if (status === 404 && (path.startsWith('/behan.dev-svelte/_app/') || path === '/')) {
+					return;
+				}
+				throw new Error(`${status} ${path} (linked from ${referrer})`);
 			}
 		}
 	}
