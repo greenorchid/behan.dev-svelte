@@ -93,9 +93,9 @@
 									/>
 								</svg>
 							</h2>
-							<p class="mb-3 text-gray-700 dark:text-gray-300">{link.description}</p>
+							<p class="mb-3 break-words text-gray-700 dark:text-gray-300">{link.description}</p>
 							<div class="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
-								<span class="truncate text-green-600 dark:text-green-400">
+								<span class="break-words text-green-600 dark:text-green-400">
 									{link.url}
 								</span>
 								{#if link.addedDate}

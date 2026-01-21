@@ -10,7 +10,7 @@
 
 <!-- Hamburger Button -->
 <Tooltip
-	content="Open navigation menu"
+	content="Open navigation"
 	trigger="mouseenter focus"
 	placement="bottom"
 	testId="tooltip-navigation"
