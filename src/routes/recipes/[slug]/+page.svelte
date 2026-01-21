@@ -3,6 +3,7 @@
 	import 'highlight.js/styles/github-dark.css';
 	import IngredientsList from '$lib/components/IngredientsList.svelte';
 	import { goto } from '$app/navigation';
+	import { base } from '$app/paths';
 
 	let { data } = $props();
 	const recipe = $derived(data.post);
@@ -12,7 +13,7 @@
 	<article id="main-content" class="container mx-auto max-w-4xl px-4 py-8">
 		<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
 		<button
-			onclick={() => goto('/recipes')}
+			onclick={() => goto(`${base}/recipes`)}
 			class="mb-6 inline-flex items-center text-sm text-gray-600 transition-colors hover:text-green-600 dark:text-gray-400 dark:hover:text-green-400"
 		>
 			<svg
