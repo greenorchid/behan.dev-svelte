@@ -2,6 +2,13 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { blueskyStore } from './stores.svelte';
 import { post, like, follow } from './actions';
 
+// Mock SvelteKit dynamic environment
+vi.mock('$env/dynamic/public', () => ({
+	env: {
+		PUBLIC_DOMAIN: 'https://test.com'
+	}
+}));
+
 // Mock BskyAgent
 vi.mock('@bluesky-social/api', () => {
 	return {

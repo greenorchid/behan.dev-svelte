@@ -15,7 +15,7 @@ export class BlueskyStore {
 	}
 
 	reset() {
-		logger.debug('BlueskyStore: Resetting state');
+		logger.debug('BlueskyStore: Resetting state to default');
 		this.session = null;
 		this.profile = null;
 		this.timeline = [];

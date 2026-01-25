@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { getComments } from './actions';
 	import BlueskyPost from './BlueskyPost.svelte';
+	import { CONFIG } from '$lib/config';
 	import { blueskyStore } from './stores.svelte';
 
 	let { postUri }: { postUri: string } = $props();
@@ -75,7 +76,7 @@
 		>
 			<p class="mb-4 text-gray-600 dark:text-gray-400">No comments yet on Bluesky.</p>
 			<a
-				href="https://bsky.app/profile/behan.dev"
+				href="https://bsky.app/profile/{CONFIG.blueskyHandle}"
 				target="_blank"
 				rel="noopener noreferrer"
 				class="inline-flex items-center gap-2 text-blue-600 hover:underline dark:text-blue-400"

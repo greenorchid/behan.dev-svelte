@@ -1,7 +1,8 @@
 import { blueskyStore } from './stores.svelte';
 import type { BlueskyPost, BlueskyComment } from './types';
 import { logger } from '$lib/logger';
-import { dev } from '$app/environment';
+import { BskyAgent } from '@bluesky-social/api';
+import { CONFIG } from '$lib/config';
 
 export async function post(text: string) {
 	if (!blueskyStore.agent || !blueskyStore.session) {
@@ -92,27 +93,45 @@ export async function follow(subjectDid: string) {
 }
 
 export async function getTimeline() {
-	if (!blueskyStore.agent || !blueskyStore.isAuthenticated) return;
-	if (blueskyStore.isLoading && blueskyStore.timeline.length === 0) return;
+	logger.debug('Bluesky actions: getTimeline called', {
+		isLoading: blueskyStore.isLoading,
+		hasTimeline: blueskyStore.timeline.length > 0
+	});
+
+	if (blueskyStore.isLoading && blueskyStore.timeline.length === 0) {
+		logger.debug('Bluesky actions: getTimeline skipped (already loading)');
+		return;
+	}
 
 	try {
+		logger.debug('Bluesky actions: Fetching timeline for actor:', CONFIG.blueskyHandle);
 		blueskyStore.isLoading = true;
-		const response = await blueskyStore.agent.getTimeline();
-		// Transform to our BlueskyPost type if needed, but for now we'll take what we get
-		// The API returns feed items which contain posts
-		blueskyStore.timeline = (response.data as any).feed.map((item: any) => item.post);
+
+		// Always use the public actor feed for the "Community Feed" UI
+		const guestAgent = new BskyAgent({ service: 'https://api.bsky.app' });
+		const response = await guestAgent.getAuthorFeed({ actor: CONFIG.blueskyHandle });
+
+		logger.debug('Bluesky actions: Feed response received:', {
+			count: response.data.feed.length,
+			handle: CONFIG.blueskyHandle
+		});
+
+		const posts = (response.data as any).feed.map((item: any) => item.post);
+		blueskyStore.timeline = posts;
 	} catch (error) {
-		logger.error('Failed to fetch timeline:', error);
+		logger.error('Failed to fetch timeline:', {
+			error: error instanceof Error ? error.message : 'Unknown error',
+			handle: CONFIG.blueskyHandle
+		});
 	} finally {
 		blueskyStore.isLoading = false;
 	}
 }
 
 export async function getComments(uri: string) {
-	if (!blueskyStore.agent) return [];
-
 	try {
-		const response = await blueskyStore.agent.getPostThread({ uri });
+		const agent = blueskyStore.agent || new BskyAgent({ service: 'https://api.bsky.app' });
+		const response = await agent.getPostThread({ uri });
 		return response.data.thread;
 	} catch (error) {
 		logger.error('Failed to fetch comments:', error);
