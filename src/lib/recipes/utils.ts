@@ -30,6 +30,7 @@ export interface RecipePost {
 	html: string;
 	ingredients?: Ingredient[];
 	servings?: number;
+	blueskyUri?: string;
 }
 
 // Load all markdown files from the posts directory
