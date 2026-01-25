@@ -4,11 +4,11 @@
 	import 'highlight.js/styles/github-dark.css';
 	import { goto } from '$app/navigation';
 	import { base } from '$app/paths';
+	import { page } from '$app/state';
 	import Tooltip from '$lib/components/Tooltip.svelte';
 	import BlueskyComments from '$lib/components/bluesky/BlueskyComments.svelte';
-	import { post as postToBluesky } from '$lib/components/bluesky/actions';
-	import { blueskyStore } from '$lib/components/bluesky/stores.svelte';
 	import { initializeAgent } from '$lib/components/bluesky/client';
+	import { CONFIG } from '$lib/config';
 
 	let { data } = $props();
 	const post = $derived(data.post);
@@ -82,7 +82,7 @@
 						{/each}
 					</div>
 				{/if}
-				<div class="mt-4">
+				<div class="mt-6 flex flex-wrap items-center justify-between gap-4">
 					<Tooltip
 						content={getAiTooltip(post.aiContributions)}
 						trigger="mouseenter focus"
@@ -96,34 +96,22 @@
 							🤖 AI: {post.aiContributions}
 						</span>
 					</Tooltip>
-				</div>
 
-				<div class="mt-4 flex flex-wrap items-center gap-4">
-					{#if blueskyStore.isAuthenticated}
-						<button
-							onclick={async () => {
-								const text = `Read "${post.title}" by @${blueskyStore.session?.handle || 'behan.dev'}\n\n${window.location.href}`;
-								await postToBluesky(text);
-								alert('Shared to Bluesky!');
-							}}
-							disabled={blueskyStore.isLoading}
-							class="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
-						>
-							<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
-								<path
-									d="M12 10.8c0-4.004 3.014-7.25 6.732-7.25C22.454 3.55 24 6.545 24 9.496c0 3.32-2.148 6.27-5.414 7.245 4.316.326 7.414 2.213 7.414 4.54 0 2.242-2.88 4.148-7.3 4.607.014-.148.02-.3.02-.454 0-4.004-3.014-7.25-6.732-7.25-3.718 0-6.732 3.246-6.732 7.25 0 .154.006.306.02.454-4.42-.459-7.3-2.365-7.3-4.607 0-2.327 3.098-4.214 7.414-4.54C2.148 15.766 0 12.816 0 9.496c0-2.951 1.546-5.946 5.268-5.946 3.718 0 6.732 3.246 6.732 7.25z"
-								/>
-							</svg>
-							Share on Bluesky
-						</button>
-					{:else}
-						<a
-							href="/"
-							class="inline-flex items-center gap-2 rounded-lg bg-gray-200 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
-						>
-							Connect Bluesky to Share
-						</a>
-					{/if}
+					<a
+						href="https://bsky.app/intent/compose?text={encodeURIComponent(
+							`Read "${post.title}" by @${CONFIG.blueskyHandle}\n\n${page.url.href}`
+						)}"
+						target="_blank"
+						rel="noopener noreferrer"
+						class="inline-flex items-center gap-2 rounded-lg bg-[#0085ff] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#0070d6]"
+					>
+						<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+							<path
+								d="M23.169 11.237c-.368-2.124-2.583-4.22-5.46-4.22-3.155 0-5.708 2.096-5.708 4.675 0 2.578 2.553 4.674 5.708 4.674h.01c2.81 0 4.152-1.342 4.152-1.342s1.42 2.062 4.908 2.062c3.486 0 5.215-2.062 5.093-4.54-.08-1.597-1.12-2.731-2.903-3.303 3.65-.262 6.275-2.072 6.275-4.507 0-2.348-2.457-4.267-6.078-4.639.012.13.018.261.018.395 0 3.08-2.61 5.576-5.83 5.576-3.218 0-5.83-2.496-5.83-5.576 0-.134.006-.265.018-.395-3.62.372-6.077 2.291-6.077 4.639 0 2.435 2.624 4.245 6.274 4.507-1.783.572-2.822 1.706-2.903 3.303-.122 2.478 1.607 4.54 5.093 4.54 3.488 0 4.909-2.062 4.909-2.062s1.34 1.342 4.15 1.342h.01c3.156 0 5.71-2.096 5.71-4.674 0-2.579-2.554-4.675-5.71-4.675-2.876 0-5.092 2.096-5.46 4.22z"
+							/>
+						</svg>
+						Share on Bluesky
+					</a>
 
 					{#if post.blueskyUri}
 						<a
