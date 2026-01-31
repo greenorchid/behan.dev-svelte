@@ -15,20 +15,24 @@ This GitHub Actions workflow automatically posts new blog posts and recipes to B
 ### 2. Add GitHub Secrets
 
 Go to your GitHub repository:
+
 1. Click **Settings** → **Secrets and variables** → **Actions**
 2. Click **New repository secret**
 3. Add the following secrets:
 
 #### `BLUESKY_HANDLE`
+
 - **Value**: Your Bluesky handle (e.g., `yourhandle.bsky.social`)
 
 #### `BLUESKY_APP_PASSWORD`
+
 - **Value**: The app password you created in step 1
 - ⚠️ **Important**: Use the app password, NOT your main Bluesky password
 
 ### 3. Update Site URL (Optional)
 
 If your site URL is different from `https://behan.dev`, update it in:
+
 - `.github/workflows/bluesky-auto-post.yml` (line with `SITE_URL`)
 
 ### 4. Testing
@@ -36,6 +40,7 @@ If your site URL is different from `https://behan.dev`, update it in:
 The workflow is currently configured to run on **all branches** for testing purposes.
 
 To test:
+
 1. Create a new branch
 2. Add a new blog post or recipe without a `blueskyUri` field
 3. Commit and push
@@ -47,11 +52,12 @@ To test:
 Once testing is complete, restrict the workflow to the `main` branch:
 
 Edit `.github/workflows/bluesky-auto-post.yml`:
+
 ```yaml
 on:
   push:
     branches:
-      - main  # Change from '**' to 'main'
+      - main # Change from '**' to 'main'
 ```
 
 ## How It Works
@@ -66,6 +72,7 @@ on:
 ## Post Format
 
 Posts are formatted as:
+
 ```
 {title}
 
@@ -79,6 +86,7 @@ If the combined text exceeds 300 characters (Bluesky's limit), it will be trunca
 ## Frontmatter Example
 
 **Before posting:**
+
 ```yaml
 ---
 title: 'My New Blog Post'
@@ -89,6 +97,7 @@ tags: ['AI', 'Platform Engineering']
 ```
 
 **After posting:**
+
 ```yaml
 ---
 title: 'My New Blog Post'
@@ -102,20 +111,24 @@ blueskyUri: 'at://did:plc:abc123/app.bsky.feed.post/xyz789'
 ## Troubleshooting
 
 ### Workflow doesn't run
+
 - Check that the file path matches `src/lib/blog/posts/*.md` or `src/lib/recipes/posts/*.md`
 - Verify the workflow file is in `.github/workflows/`
 
 ### Authentication fails
+
 - Verify `BLUESKY_HANDLE` is correct (should include `.bsky.social`)
 - Ensure you're using an **app password**, not your main password
 - Check that secrets are properly set in GitHub repository settings
 
 ### Posts aren't being updated
+
 - Check the Actions logs for errors
 - Verify the script has write permissions (`permissions: contents: write`)
 - Ensure the frontmatter format is correct (YAML with `---` delimiters)
 
 ### Duplicate posts
+
 - The script checks for existing `blueskyUri` fields to prevent duplicates
 - If a post already has a `blueskyUri`, it will be skipped
 

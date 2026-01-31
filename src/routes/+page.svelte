@@ -3,7 +3,7 @@
 	import LogoAnimated from '$lib/components/LogoAnimated.svelte';
 	import { goto } from '$app/navigation';
 	import { base } from '$app/paths';
-	
+
 	import BlueskyFeed from '$lib/components/bluesky/BlueskyFeed.svelte';
 </script>
 

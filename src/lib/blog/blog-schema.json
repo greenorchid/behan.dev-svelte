@@ -19,23 +19,13 @@
 		},
 		"aiContributions": {
 			"type": "string",
-			"enum": [
-				"none",
-				"partial",
-				"considerable"
-			]
+			"enum": ["none", "partial", "considerable"]
 		},
 		"blueskyUri": {
 			"type": "string",
 			"format": "uri"
 		}
 	},
-	"required": [
-		"title",
-		"date",
-		"excerpt",
-		"tags",
-		"aiContributions"
-	],
+	"required": ["title", "date", "excerpt", "tags", "aiContributions"],
 	"additionalProperties": false
 }

@@ -44,26 +44,26 @@
 				<div class="mt-6 flex flex-wrap items-center justify-between gap-2">
 					<div class="flex flex-wrap gap-2">
 						{#if recipe.tags.length > 0}
-								{#each recipe.tags as tag (tag)}
-									<span
-										class="rounded-full border border-green-200 bg-green-100 px-3 py-1 text-sm text-green-700 dark:border-green-800 dark:bg-green-900/30 dark:text-green-400"
-									>
-										{tag}
-									</span>
-								{/each}
-							{/if}
-						</div>
-						<BlueskyButton
-							href="https://bsky.app/intent/compose?text={encodeURIComponent(
-								`Read \"${recipe.title}\" by @${CONFIG.blueskyHandle}\n\n${page.url.href}`
-							)}"
-						/>
+							{#each recipe.tags as tag (tag)}
+								<span
+									class="rounded-full border border-green-200 bg-green-100 px-3 py-1 text-sm text-green-700 dark:border-green-800 dark:bg-green-900/30 dark:text-green-400"
+								>
+									{tag}
+								</span>
+							{/each}
+						{/if}
+					</div>
+					<BlueskyButton
+						href="https://bsky.app/intent/compose?text={encodeURIComponent(
+							`Read \"${recipe.title}\" by @${CONFIG.blueskyHandle}\n\n${page.url.href}`
+						)}"
+					/>
 
 					{#if recipe.blueskyUri}
 						<a
-							href="https://bsky.app/profile/{recipe.blueskyUri.split('/')[2]}/post/{recipe.blueskyUri
-								.split('/')
-								.pop()}"
+							href="https://bsky.app/profile/{recipe.blueskyUri.split(
+								'/'
+							)[2]}/post/{recipe.blueskyUri.split('/').pop()}"
 							target="_blank"
 							rel="noopener noreferrer"
 							class="text-sm text-blue-600 hover:underline dark:text-blue-400"

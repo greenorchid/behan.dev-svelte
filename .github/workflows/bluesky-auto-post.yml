@@ -3,13 +3,13 @@ name: Bluesky Auto-Post
 on:
   push:
     branches:
-      - '**'  # Run on all branches for testing; change to 'main' after testing
+      - '**' # Run on all branches for testing; change to 'main' after testing
     paths:
       - 'src/lib/blog/posts/*.md'
       - 'src/lib/recipes/posts/*.md'
 
 permissions:
-  contents: write  # Required to commit changes back
+  contents: write # Required to commit changes back
 
 jobs:
   bluesky-post:
@@ -17,12 +17,12 @@ jobs:
     # Only run after successful build (if build job exists in deploy.yml)
     # Remove this condition if you want it to run independently
     if: github.event_name == 'push'
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 2  # Need at least 2 commits to compare
+          fetch-depth: 2 # Need at least 2 commits to compare
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node.js

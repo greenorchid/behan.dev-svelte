@@ -42,10 +42,7 @@
 							{
 								"type": "object",
 								"additionalProperties": {
-									"type": [
-										"string",
-										"number"
-									]
+									"type": ["string", "number"]
 								}
 							}
 						]
@@ -59,12 +56,6 @@
 			"format": "uri"
 		}
 	},
-	"required": [
-		"title",
-		"date",
-		"excerpt",
-		"tags",
-		"ingredients"
-	],
+	"required": ["title", "date", "excerpt", "tags", "ingredients"],
 	"additionalProperties": true
 }

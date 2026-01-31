@@ -37,7 +37,7 @@
 		</div>
 	</div>
 
-	{#if blueskyStore.isLoading }
+	{#if blueskyStore.isLoading}
 		<div class="p-8 text-center text-gray-500">
 			<svg
 				class="mx-auto mb-2 h-8 w-8 animate-spin text-blue-500"
