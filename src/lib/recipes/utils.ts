@@ -122,6 +122,14 @@ function parseMarkdown(content: string, slug: string): RecipePost {
 	// Parse servings
 	const servings = servingsMatch ? parseFloat(servingsMatch[1]) : undefined;
 
+	// Parse blueskyUri
+	const blueskyUriMatch =
+		frontmatter.match(/^blueskyUri:\s*["'](.+?)["']/m) ||
+		frontmatter.match(/^blueskyUri:\s*(.+)$/m);
+	const blueskyUri = blueskyUriMatch
+		? (blueskyUriMatch[1] || blueskyUriMatch[0]).replace(/^blueskyUri:\s*["']?|["']?$/g, '').trim()
+		: undefined;
+
 	// Convert markdown to HTML
 	let html = marked(markdownContent) as string;
 
@@ -136,6 +144,7 @@ function parseMarkdown(content: string, slug: string): RecipePost {
 		tags,
 		ingredients,
 		servings,
+		blueskyUri,
 		content: markdownContent,
 		html
 	};
