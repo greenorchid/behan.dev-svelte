@@ -195,19 +195,15 @@ async function main() {
 	// Commit the changes if any files were updated
 	if (updatedFiles.length > 0) {
 		console.log(`\n📝 Committing ${updatedFiles.length} updated file(s)...`);
-
+		// Commit and push changes
 		try {
-			execSync('git config user.name "GitHub Actions Bot"');
-			execSync('git config user.email "actions@github.com"');
-
-			for (const file of updatedFiles) {
-				execSync(`git add "${file}"`);
-			}
-
-			execSync('git commit -m "chore: add Bluesky URIs to new posts [skip ci]"');
+			execSync('git config user.name "github-actions[bot]"');
+			execSync('git config user.email "github-actions[bot]@users.noreply.github.com"');
+			execSync('git add .');
+			const message = `chore: update bluesky URIs`;
+			execSync(`git commit -m "${message}"`);
 			execSync('git push');
-
-			console.log('✓ Changes committed and pushed successfully');
+			console.log('Successfully committed and pushed changes.');
 		} catch (error) {
 			console.error('Error committing changes:', error.message);
 			process.exit(1);
