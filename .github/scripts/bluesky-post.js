@@ -61,16 +61,47 @@ function getPostUrl(filePath) {
 
 async function postToBluesky(agent, title, excerpt, url) {
 	try {
-		// Create post text: title + excerpt + URL
-		const postText = `${title}\n\n${excerpt}\n\n${url}`;
+		const MAX_LENGTH = 300;
+		const separator = '\n\n';
 
-		// Truncate if too long (Bluesky has a 300 character limit)
-		const maxLength = 300;
-		const finalText =
-			postText.length > maxLength ? postText.substring(0, maxLength - 3) + '...' : postText;
+		//we want to always include the title and the url, so we need to make sure that we have enough space for them
+		const fixedTail = `${separator}${url}`;
+		const fixedHead = `${title}${separator}`;
+
+		const remaining = MAX_LENGTH - fixedHead.length - fixedTail.length;
+
+		let finalExcerpt = '';
+
+		if (remaining > 0) {
+			finalExcerpt = excerpt.length > remaining ? excerpt.slice(0, remaining - 3) + '...' : excerpt;
+		}
+
+		const text =
+			finalExcerpt.length > 0
+				? `${title}${separator}${finalExcerpt}${separator}${url}`
+				: `${title}${separator}${url}`;
+
+		// --- FACET CREATION ---
+		const encoder = new TextEncoder();
+
+		const urlStart = encoder.encode(text.slice(0, text.lastIndexOf(url))).length;
+		const urlEnd = urlStart + encoder.encode(url).length;
+
+		const facets = [
+			{
+				index: { byteStart: urlStart, byteEnd: urlEnd },
+				features: [
+					{
+						$type: 'app.bsky.richtext.facet#link',
+						uri: url
+					}
+				]
+			}
+		];
 
 		const response = await agent.post({
-			text: finalText,
+			text,
+			facets,
 			createdAt: new Date().toISOString()
 		});
 
