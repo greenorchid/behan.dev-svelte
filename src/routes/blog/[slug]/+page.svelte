@@ -7,6 +7,7 @@
 	import { page } from '$app/state';
 	import Tooltip from '$lib/components/Tooltip.svelte';
 	import BlueskyComments from '$lib/components/bluesky/BlueskyComments.svelte';
+	import BlueskyButton from '$lib/components/bluesky/BlueskyButton.svelte';
 	import { initializeAgent } from '$lib/components/bluesky/client';
 	import { CONFIG } from '$lib/config';
 
@@ -97,21 +98,11 @@
 						</span>
 					</Tooltip>
 
-					<a
+					<BlueskyButton
 						href="https://bsky.app/intent/compose?text={encodeURIComponent(
-							`Read "${post.title}" by @${CONFIG.blueskyHandle}\n\n${page.url.href}`
+							`Read \"${post.title}\" by @${CONFIG.blueskyHandle}\n\n${page.url.href}`
 						)}"
-						target="_blank"
-						rel="noopener noreferrer"
-						class="inline-flex items-center gap-2 rounded-lg bg-[#0085ff] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#0070d6]"
-					>
-						<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
-							<path
-								d="M23.169 11.237c-.368-2.124-2.583-4.22-5.46-4.22-3.155 0-5.708 2.096-5.708 4.675 0 2.578 2.553 4.674 5.708 4.674h.01c2.81 0 4.152-1.342 4.152-1.342s1.42 2.062 4.908 2.062c3.486 0 5.215-2.062 5.093-4.54-.08-1.597-1.12-2.731-2.903-3.303 3.65-.262 6.275-2.072 6.275-4.507 0-2.348-2.457-4.267-6.078-4.639.012.13.018.261.018.395 0 3.08-2.61 5.576-5.83 5.576-3.218 0-5.83-2.496-5.83-5.576 0-.134.006-.265.018-.395-3.62.372-6.077 2.291-6.077 4.639 0 2.435 2.624 4.245 6.274 4.507-1.783.572-2.822 1.706-2.903 3.303-.122 2.478 1.607 4.54 5.093 4.54 3.488 0 4.909-2.062 4.909-2.062s1.34 1.342 4.15 1.342h.01c3.156 0 5.71-2.096 5.71-4.674 0-2.579-2.554-4.675-5.71-4.675-2.876 0-5.092 2.096-5.46 4.22z"
-							/>
-						</svg>
-						Share on Bluesky
-					</a>
+					/>
 
 					{#if post.blueskyUri}
 						<a

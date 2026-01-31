@@ -3,6 +3,8 @@
 	import { login, logout, initializeAgent } from './client';
 	import { onMount } from 'svelte';
 	import { logger } from '$lib/logger';
+	import BlueskyLogo from './BlueskyLogo.svelte';
+	import Tooltip from '../Tooltip.svelte';
 
 	// Use blueskyStore directly for reactivity
 
@@ -23,7 +25,9 @@
 </script>
 
 <div
-	class="flex flex-col gap-4 rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800"
+	class="flex flex-col gap-4 rounded-xl bg-white p-4 shadow-sm dark:bg-gray-800 {blueskyStore.session
+		? 'border border-gray-200 dark:border-gray-700'
+		: ''}"
 >
 	{#if blueskyStore.session}
 		<div class="flex items-center gap-3">
@@ -54,46 +58,40 @@
 			</div>
 			<button
 				onclick={handleLogout}
-				class="rounded-lg px-3 py-1.5 text-sm font-medium text-red-600 transition-colors hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"
+				class="rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
 			>
 				Logout
 			</button>
 		</div>
 	{:else}
 		<div class="py-2 text-center">
-			<h3 class="mb-2 text-lg font-bold text-gray-900 dark:text-white">Connect to Bluesky</h3>
-			<p class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-				Log in to see your timeline and interact with posts.
-			</p>
-			<button
-				onclick={handleLogin}
-				disabled={blueskyStore.isLoading}
-				class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-2.5 font-semibold text-white transition-all hover:bg-blue-700 focus:ring-4 focus:ring-blue-200 disabled:opacity-50 dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-800"
-			>
-				{#if blueskyStore.isLoading}
-					<svg
-						class="h-5 w-5 animate-spin text-white"
-						xmlns="http://www.w3.org/2000/svg"
-						fill="none"
-						viewBox="0 0 24 24"
-					>
-						<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"
-						></circle>
-						<path
-							class="opacity-75"
-							fill="currentColor"
-							d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-						></path>
-					</svg>
-				{:else}
-					<svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-						<path
-							d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z"
-						/>
-					</svg>
-				{/if}
-				Sign in with Bluesky
-			</button>
+			<Tooltip content="Log in to see your timeline and interact with posts.">
+				<button
+					onclick={handleLogin}
+					disabled={blueskyStore.isLoading}
+					class="inline-flex w-full items-center justify-center gap-2 rounded-md border border-gray-300 bg-white px-6 py-2.5 font-medium text-gray-700 transition-colors hover:bg-gray-50 focus:ring-4 focus:ring-blue-200 disabled:opacity-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 dark:focus:ring-blue-800"
+				>
+					{#if blueskyStore.isLoading}
+						<svg
+							class="h-5 w-5 animate-spin text-gray-700 dark:text-gray-300"
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24"
+						>
+							<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"
+							></circle>
+							<path
+								class="opacity-75"
+								fill="currentColor"
+								d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+							></path>
+						</svg>
+					{:else}
+						<BlueskyLogo size={20} />
+					{/if}
+					Sign in with Bluesky
+				</button>
+			</Tooltip>
 		</div>
 	{/if}
 

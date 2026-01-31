@@ -3,6 +3,7 @@
 	import { login, logout, initializeAgent } from './client';
 	import { getTimeline } from './actions';
 	import BlueskyPost from './BlueskyPost.svelte';
+	import BlueskyAuth from './BlueskyAuth.svelte';
 	import { onMount } from 'svelte';
 	import { logger } from '$lib/logger';
 	import Tooltip from '../Tooltip.svelte';
@@ -32,11 +33,7 @@
 		</Tooltip>
 
 		<div class="flex items-center gap-2">
-			<span
-				class="inline-flex items-center rounded-full bg-green-100 px-2 py-0.5 text-[10px] font-medium text-green-800 dark:bg-green-900/30 dark:text-green-400"
-			>
-				Live
-			</span>
+			<BlueskyAuth />
 		</div>
 	</div>
 
