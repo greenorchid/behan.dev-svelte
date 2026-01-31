@@ -1,24 +1,31 @@
 ---
-title: 'Chicago Style Hot Giardiniera'
+title: Chicago Style Hot Giardiniera
 date: '2026-01-31'
-excerpt: 'A bold, unapologetic mix of pickled vegetables and peppers packed in oil. The essential "spicy oily crunch" for a proper Italian Beef Sandwich.'
-tags: ['Italian', 'Condiment', 'Pickle', 'Spicy']
+excerpt: >-
+  A bold, unapologetic mix of pickled vegetables and peppers packed in oil. The
+  essential "spicy oily crunch" for a proper Italian Beef Sandwich.
+tags:
+  - Italian
+  - Condiment
+  - Pickle
+  - Spicy
 servings: 20
 ingredients:
-  - Cauliflower: 260 g # half head, large dice
-  - Celery stalks: 250 g # 4 stalks, large dice
-  - Carrots: 3 # large dice
-  - Peppers: 100 g # ~12 peppers, seeded and diced
-  - Green olives: 140 g # 1 cup, pitted
-  - Kosher salt: 150 g # approximate, for brining (8% of water+veg weight)
-  - Water: 1000 ml # approximate, for brining and pickling
-  - Distilled white vinegar: 500 ml # approximate, equal part to water
-  - Sugar: 30 g # 2 Tbsp, added per my preference
-  - Dried thyme: 9 g # 3 Tbsp
-  - Dried oregano: 9 g # 3 Tbsp
-  - Chili flakes: 5 g # 1 Tbsp
-  - Garlic cloves: 6 # 30g, peeled
-  - Olive oil: 250 ml # enough to cover
+  - Cauliflower: 260 g
+  - Celery stalks: 250 g
+  - Carrots: 3
+  - Peppers: 100 g
+  - Green olives: 140 g
+  - Kosher salt: 150 g
+  - Water: 1000 ml
+  - Distilled white vinegar: 500 ml
+  - Sugar: 30 g
+  - Dried thyme: 9 g
+  - Dried oregano: 9 g
+  - Chili flakes: 5 g
+  - Garlic cloves: 6
+  - Olive oil: 250 ml
+blueskyUri: 'at://did:plc:oo4sqwem2prw2yebqexllrx3/app.bsky.feed.post/3mdqhzkab2l2g'
 ---
 
 # Chicago Style Hot Giardiniera
