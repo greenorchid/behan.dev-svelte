@@ -2,7 +2,7 @@
 title: 'Chicago Style Hot Giardiniera'
 date: '2026-01-31'
 excerpt: 'A bold, unapologetic mix of pickled vegetables and peppers packed in oil. The essential "spicy oily crunch" for a proper Italian Beef Sandwich.'
-tags: ['Italian', 'Condiment', 'Pickle', 'Spicy', 'TESTING]
+tags: ['Italian', 'Condiment', 'Pickle', 'Spicy']
 servings: 20
 ingredients:
   - Cauliflower: 260 g # half head, large dice
@@ -19,7 +19,6 @@ ingredients:
   - Chili flakes: 5 g # 1 Tbsp
   - Garlic cloves: 6 # 30g, peeled
   - Olive oil: 250 ml # enough to cover
-blueskyUri: 'at://did:plc:oo4sqwem2prw2yebqexllrx3/app.bsky.feed.post/3mdqx4rljkc2n'
 ---
 
 # Chicago Style Hot Giardiniera
