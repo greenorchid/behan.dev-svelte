@@ -7,7 +7,7 @@
 		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
-		"prepare": "svelte-kit sync || echo ''",
+		"prepare": "svelte-kit sync || echo '' && husky install",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"test": "npm run test:unit && npm run test:e2e",
@@ -47,7 +47,8 @@
 		"typescript": "^5.9.3",
 		"typescript-eslint": "^8.53.1",
 		"vite": "^7.2.6",
-		"vitest": "^4.0.17"
+		"vitest": "^4.0.17",
+		"husky": "^8.0.0"
 	},
 	"dependencies": {
 		"@bluesky-social/api": "^0.17.3",
