@@ -1,5 +1,4 @@
 import { describe, it, expect } from 'vitest';
-// @ts-ignore - we'll export this soon
 import { parseMarkdown } from '../utils';
 
 describe('Tags Parsing', () => {
