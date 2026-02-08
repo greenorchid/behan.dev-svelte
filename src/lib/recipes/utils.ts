@@ -1,20 +1,4 @@
-import { marked } from 'marked';
-import { markedHighlight } from 'marked-highlight';
-import hljs from 'highlight.js';
-import * as grayMatter from 'gray-matter';
-
-const matter = grayMatter.default || grayMatter;
-
-// Configure marked with syntax highlighting
-marked.use(
-	markedHighlight({
-		langPrefix: 'hljs language-',
-		highlight(code, lang) {
-			const language = hljs.getLanguage(lang || '') ? lang : 'plaintext';
-			return hljs.highlight(code, { language }).value;
-		}
-	})
-);
+import { parseMarkdown } from '$lib/markdown';
 
 export interface Ingredient {
 	name: string;
@@ -58,7 +42,7 @@ export function getAllRecipes(): RecipePost[] {
 	for (const [path, content] of Object.entries(postsModules)) {
 		const slug = path.split('/').pop()?.replace('.md', '') || '';
 		const rawContent = content as string;
-		const post = parseMarkdown(rawContent, slug);
+		const post = parseMarkdownFile(rawContent, slug);
 		posts.push(post);
 	}
 	return posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
@@ -68,56 +52,12 @@ export function getPostBySlug(slug: string): RecipePost | null {
 	const path = `/src/lib/recipes/posts/${slug}.md`;
 	const content = postsModules[path] as string | undefined;
 	if (!content) return null;
-	return parseMarkdown(content, slug);
+	return parseMarkdownFile(content, slug);
 }
 
-export function parseMarkdown(content: string, slug: string): RecipePost {
+export function parseMarkdownFile(content: string, slug: string): RecipePost {
 	try {
-		const parts = content.split(/^---/m);
-		if (parts.length < 3) throw new Error(`Invalid markdown format for post: ${slug}`);
-
-		const frontmatter = parts[1].trim();
-		const markdownContent = parts.slice(2).join('---').trim();
-
-		let data: Frontmatter = {};
-		try {
-			data = matter(`---\n${frontmatter}\n---`).data as Frontmatter;
-		} catch (e) {
-			console.warn(`gray-matter failed for recipe ${slug}, attempting manual parse`, e);
-			const lines = frontmatter.split('\n');
-			let inTags = false;
-			let tagContent = '';
-
-			lines.forEach((line) => {
-				const trimmed = line.trim();
-				if (trimmed.startsWith('tags:')) {
-					const value = trimmed.slice(5).trim();
-					if (value.startsWith('[')) {
-						inTags = true;
-						tagContent = value;
-						if (value.endsWith(']')) inTags = false;
-					} else if (!value) {
-						// tags: followed by bracket on next line
-						inTags = true;
-						tagContent = '';
-					} else {
-						data.tags = value;
-					}
-				} else if (inTags) {
-					tagContent += ' ' + trimmed;
-					if (trimmed.endsWith(']')) inTags = false;
-				} else {
-					const colonIndex = line.indexOf(':');
-					if (colonIndex > 0) {
-						const key = line.slice(0, colonIndex).trim();
-						let value = line.slice(colonIndex + 1).trim();
-						if (value.startsWith("'") || value.startsWith('"')) value = value.slice(1, -1);
-						data[key] = value;
-					}
-				}
-			});
-			if (tagContent) data.tags = tagContent;
-		}
+		const { data, content: markdownContent, html } = parseMarkdown<Frontmatter>(content);
 
 		const title = data.title || 'Untitled';
 		const dateObj = data.date || new Date().toISOString().split('T')[0];
@@ -139,11 +79,8 @@ export function parseMarkdown(content: string, slug: string): RecipePost {
 		}
 
 		const ingredients = data.ingredients ? parseIngredients(data.ingredients) : [];
-		const servings = data.servings;
+		const servings = data.servings ? Number(data.servings) : undefined;
 		const blueskyUri = data.blueskyUri;
-
-		let html = marked(markdownContent) as string;
-		html = html.replace(/<h1[^>]*>.*?<\/h1>/i, '');
 
 		return {
 			slug,

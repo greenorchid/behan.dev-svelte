@@ -1,20 +1,4 @@
-import { marked } from 'marked';
-import { markedHighlight } from 'marked-highlight';
-import hljs from 'highlight.js';
-import * as grayMatter from 'gray-matter';
-
-const matter = grayMatter.default || grayMatter;
-
-// Configure marked with syntax highlighting
-marked.use(
-	markedHighlight({
-		langPrefix: 'hljs language-',
-		highlight(code, lang) {
-			const language = hljs.getLanguage(lang || '') ? lang : 'plaintext';
-			return hljs.highlight(code, { language }).value;
-		}
-	})
-);
+import { parseMarkdown, calculateReadingTime } from '$lib/markdown';
 
 interface Frontmatter {
 	title?: string;
@@ -52,7 +36,7 @@ export function getAllPosts(): BlogPost[] {
 	for (const [path, content] of Object.entries(postsModules)) {
 		const slug = path.split('/').pop()?.replace('.md', '') || '';
 		const rawContent = content as string;
-		const post = parseMarkdown(rawContent, slug);
+		const post = parseMarkdownFile(rawContent, slug);
 		posts.push(post);
 	}
 
@@ -68,68 +52,15 @@ export function getPostBySlug(slug: string): BlogPost | null {
 		return null;
 	}
 
-	return parseMarkdown(content, slug);
+	return parseMarkdownFile(content, slug);
 }
 
-function calculateReadingTime(text: string): number {
-	const wordsPerMinute = 200;
-	// Use more robust word count that handles markdown/formatting
-	const words = text.trim().split(/\s+/).length;
-	return Math.ceil(words / wordsPerMinute);
-}
-
-export function parseMarkdown(content: string, slug: string): BlogPost {
+/**
+ * Adapter for the shared parseMarkdown that handles blog-specific normalization.
+ */
+export function parseMarkdownFile(content: string, slug: string): BlogPost {
 	try {
-		// Even more robust split: find the first two instances of ---
-		const parts = content.split(/^---/m);
-
-		let data: Frontmatter = {};
-		let markdownContent = content;
-
-		if (parts.length >= 3) {
-			const frontmatter = parts[1].trim();
-			markdownContent = parts.slice(2).join('---').trim();
-
-			try {
-				data = matter(`---\n${frontmatter}\n---`).data as Frontmatter;
-			} catch (e) {
-				console.warn(`gray-matter failed for ${slug}, attempting manual parse`, e);
-				// Manual parse for critical fields
-				const lines = frontmatter.split('\n');
-				let inTags = false;
-				let tagContent = '';
-
-				lines.forEach((line) => {
-					const trimmed = line.trim();
-					if (trimmed.startsWith('tags:')) {
-						const value = trimmed.slice(5).trim();
-						if (value.startsWith('[')) {
-							inTags = true;
-							tagContent = value;
-							if (value.endsWith(']')) inTags = false;
-						} else if (!value) {
-							// tags: followed by bracket on next line
-							inTags = true;
-							tagContent = '';
-						} else {
-							data.tags = value;
-						}
-					} else if (inTags) {
-						tagContent += ' ' + trimmed;
-						if (trimmed.endsWith(']')) inTags = false;
-					} else {
-						const colonIndex = line.indexOf(':');
-						if (colonIndex > 0) {
-							const key = line.slice(0, colonIndex).trim();
-							let value = line.slice(colonIndex + 1).trim();
-							if (value.startsWith("'") || value.startsWith('"')) value = value.slice(1, -1);
-							data[key] = value;
-						}
-					}
-				});
-				if (tagContent) data.tags = tagContent;
-			}
-		}
+		const { data, content: markdownContent, html } = parseMarkdown<Frontmatter>(content);
 
 		const title = data.title || 'Untitled';
 		const dateObj = data.date || new Date().toISOString().split('T')[0];
@@ -138,14 +69,13 @@ export function parseMarkdown(content: string, slug: string): BlogPost {
 		const aiContributions = data.aiContributions || 'none';
 		const blueskyUri = data.blueskyUri;
 
-		// Normalize tags - handle YAML list or comma string
+		// Normalize tags
 		let tags: string[] = [];
 		const rawTags = data.tags;
 		if (rawTags) {
 			if (Array.isArray(rawTags)) {
 				tags = rawTags.map((t) => String(t).trim());
 			} else if (typeof rawTags === 'string') {
-				// Handle both [tag1, tag2] and "tag1, tag2"
 				const cleanTags = rawTags.replace(/[[\]"']/g, '');
 				tags = cleanTags
 					.split(',')
@@ -153,10 +83,6 @@ export function parseMarkdown(content: string, slug: string): BlogPost {
 					.filter((t) => t.length > 0);
 			}
 		}
-
-		// Convert markdown to HTML
-		let html = marked(markdownContent) as string;
-		html = html.replace(/<h1[^>]*>.*?<\/h1>/i, '');
 
 		return {
 			slug,
